@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <title>Commit Photos</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="/style.css">
+  </head>
+  <body>
+    <% if flash[:errors] %>
+      <div id="errors">
+        <%= 'ERRORS: ' + flash[:errors] %>
+      </div>
+    <% elsif flash[:message] %>
+      <div id="message">
+        <%= flash[:message] %>
+      </div>
+    <% end %>
+    <%= yield %>
+  </body>
+</html>
