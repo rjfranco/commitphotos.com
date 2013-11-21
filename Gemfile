@@ -9,3 +9,7 @@ gem 'rake'
 gem 'sinatra'
 gem 'sinatra-activerecord'
 gem 'sinatra-flash'
+
+group :development do
+  gem 'shotgun'
+end

@@ -1,20 +1,69 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-    "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <title>Commit Photos</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/stylesheets/bootstrap.css" rel="stylesheet">
   </head>
   <body>
-    <% if flash[:errors] %>
-      <div id="errors">
-        <%= 'ERRORS: ' + flash[:errors] %>
+    <div class="container">
+      <% if flash[:errors] %>
+        <div id="errors">
+          <%= 'ERRORS: ' + flash[:errors] %>
+        </div>
+      <% elsif flash[:message] %>
+        <div id="message">
+          <%= flash[:message] %>
+        </div>
+      <% end %>
+      <!-- Wrap all page content here -->
+      <div id="wrap">
+        <br>
+        <nav class="navbar navbar-default" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Commit Photos</a>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="/about">About</a></li>
+              <li><a href="#">Link</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <% if current_user %>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Colby <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Log Out</a></li>
+                    <li><a href="#">My Profile</a></li>
+                  </ul>
+                </li>
+              <% else %>
+              <li><a href="/auth/github">Auth With Github</a></li>
+              <% end %>
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </nav>
+
+      <div class="container">
+        <%= yield %>
       </div>
-    <% elsif flash[:message] %>
-      <div id="message">
-        <%= flash[:message] %>
+
+      <div id="footer">
+        <div class="container">
+          <p class="text-muted credit">CommitPhotos.com from Colby Aley.</p>
+        </div>
       </div>
-    <% end %>
-    <%= yield %>
+    
+    </div>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="/javascripts/bootstrap.js"></script>
   </body>
 </html>
