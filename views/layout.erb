@@ -33,13 +33,13 @@
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="/about">About</a></li>
-              <li><a href="/setup">Setup</a></li>
+              <li><a href="/about">About</a></li>
+              <% if current_user %> <li><a href="/setup">Setup</a></li> <% end %>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <% if current_user %>
                 <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user.name %> <b class="caret"></b></a>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user.first_name %> <b class="caret"></b></a>
                   <ul class="dropdown-menu">
                     <li><a href="/logout">Log Out</a></li>
                     <li><a href="/profiles/<%= current_user.username %>">My Profile</a></li>
@@ -56,6 +56,7 @@
         <%= yield %>
       </div>
 
+      <hr>
       <div id="footer">
         <div class="container">
           <p class="text-muted credit">CommitPhotos.com from Colby Aley.</p>

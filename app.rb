@@ -10,17 +10,24 @@ require 'securerandom'
 # Establish database connection
 ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || 'postgres://localhost/commitphotos')
 
+class Photo < ActiveRecord::Base
+end
+
 class User < ActiveRecord::Base
 
   def self.from_github(auth)
     create do |user|
-      user.github_token = auth["credentials"]["token"]
-      user.github_id    = auth["uid"]
-      user.username     = auth["info"]["nickname"]
+      user.github_token = auth['credentials']['token']
+      user.github_id    = auth['uid']
+      user.username     = auth['info']['nickname']
       user.api_key      = SecureRandom.hex(10)
-      user.email        = auth["info"]["email"]
-      user.name         = auth["info"]["name"] || user.username
+      user.email        = auth['info']['email']
+      user.name         = auth['info']['name'] || user.username
     end
+  end
+
+  def first_name
+    self.name.split(' ')[0] || self.username
   end
 
 end
@@ -45,13 +52,8 @@ end
 
 get "/auth/github/callback" do
   auth = env['omniauth.auth']
-
-  if user = User.find_by_github_id(auth['extra']['raw_info']['id'])
-    session[:user_id] = user.id
-  else
-    user = User.from_github(auth)
-  end
-
+  user = User.find_by_github_id(auth['extra']['raw_info']['id']) || User.from_github(auth)
+  session[:user_id] = user.id
   user.update_attributes(last_login: Time.now)
   redirect '/'
 end
@@ -66,7 +68,16 @@ get '/logout' do
   redirect '/'
 end
 
+get '/setup' do
+  require_login
+  erb :setup
+end
+
 get "/profiles/:username" do
   redirect '/404' unless @user = User.find_by_username(params[:username])
   erb :profile
+end
+
+def require_login
+  redirect '/' unless current_user
 end

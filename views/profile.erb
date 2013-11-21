@@ -1,1 +1,4 @@
-<%= @user.username %>
+<h2><%= @user.name || @user.username %></h2>
+<h4><a href="https://github.com/<%= @user.username %>">View on Github</a></h4>
+
+<h3>Sad face! <%= @user.first_name %> has no photos!</h3>
