@@ -1,44 +1,4 @@
-require 'sinatra'
-require 'active_record'
-require 'sinatra/flash'
-require 'dotenv'
-require 'omniauth'
-require 'omniauth-github'
-
-require 'securerandom'
-
-# Establish database connection
-ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || 'postgres://localhost/commitphotos')
-
-class Photo < ActiveRecord::Base
-end
-
-class User < ActiveRecord::Base
-
-  def self.from_github(auth)
-    create do |user|
-      user.github_token = auth['credentials']['token']
-      user.github_id    = auth['uid']
-      user.username     = auth['info']['nickname']
-      user.api_key      = SecureRandom.hex(10)
-      user.email        = auth['info']['email']
-      user.name         = auth['info']['name'] || user.username
-    end
-  end
-
-  def first_name
-    self.name.split(' ')[0] || self.username
-  end
-
-end
-
-use Rack::Session::Cookie, expire_after: 31556926,
-                           key: 'commitphotos',
-                           secret: ENV['SESSION_SECRET']
-
-use OmniAuth::Builder do
-  provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
-end
+require './environment'
 
 helpers do
   def current_user
