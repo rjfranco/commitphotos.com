@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
 
+  has_many :photos
+
   def self.from_github(auth)
     create do |user|
       user.github_token = auth['credentials']['token']

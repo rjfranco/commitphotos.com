@@ -26,6 +26,10 @@ GEM
       tzinfo (~> 0.3.37)
     arel (4.0.1)
     atomic (1.1.14)
+    aws-s3 (0.6.3)
+      builder
+      mime-types
+      xml-simple
     builder (3.1.4)
     dotenv (0.9.0)
     faraday (0.8.8)
@@ -35,6 +39,7 @@ GEM
     i18n (0.6.5)
     jwt (0.1.8)
       multi_json (>= 1.5)
+    mime-types (2.0)
     minitest (4.7.5)
     multi_json (1.8.2)
     multipart-post (1.2.0)
@@ -70,12 +75,14 @@ GEM
       atomic
     tilt (1.4.1)
     tzinfo (0.3.38)
+    xml-simple (1.1.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   activerecord
+  aws-s3
   dotenv
   omniauth
   omniauth-github!

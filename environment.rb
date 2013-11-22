@@ -4,8 +4,12 @@ require 'sinatra/flash'
 require 'dotenv'
 require 'omniauth'
 require 'omniauth-github'
+require 'aws/s3'
 
+require 'json'
 require 'securerandom'
+
+require './lib/s3'
 
 # Establish database connection
 ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || 'postgres://localhost/commitphotos')
