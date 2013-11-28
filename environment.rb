@@ -9,10 +9,7 @@ require 'aws/s3'
 require 'json'
 require 'securerandom'
 
-require './lib/s3'
-
-# Establish database connection
-ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || 'postgres://localhost/commitphotos')
+require File.expand_path('../lib/s3', __FILE__)
 
 use Rack::Session::Cookie, expire_after: 31556926,
                            key: 'commitphotos',

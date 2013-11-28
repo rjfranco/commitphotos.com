@@ -7,6 +7,7 @@ helpers do
 end
 
 get '/' do
+  @photos = Photo.where("photos.url IS NOT NULL").order("photos.created_at desc").limit(5)
   erb :index
 end
 
@@ -19,16 +20,14 @@ get '/auth/github/callback' do
 end
 
 post '/photos/new' do
+  p request
   if params['api_key'].nil?
     { success: false, error: "You need to provide an API key." }.to_json
   elsif user = User.find_by_api_key(params['api_key'])
 
-    begin
-      filename = params["photo"][:filename]
-      S3.upload(filename, params["photo"][:tempfile])
-      url = "http://#{ENV['AMAZON_BUCKET_NAME']}.s3.amazonaws.com/#{filename}"
-    rescue "There was an error uploading the file"
-    end
+    filename = params["photo"][:filename]
+    S3.upload(filename, params["photo"][:tempfile])
+    url = "http://#{ENV['AMAZON_BUCKET_NAME']}.s3.amazonaws.com/#{filename}"
 
     photo = Photo.new
     photo.user_id = user.id

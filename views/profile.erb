@@ -5,6 +5,6 @@
 <h3>Sad face! <%= @user.first_name %> has no photos!</h3>
 <% else %>
   <% @user.photos.each do |photo| %>
-    <img src="<%= photo.url %>">
+    <img style="width:800px;height:450px;" src="<%= photo.url %>">
   <% end %>
 <% end %>
