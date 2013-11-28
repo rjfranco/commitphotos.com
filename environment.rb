@@ -11,6 +11,9 @@ require 'securerandom'
 
 require File.expand_path('../lib/s3', __FILE__)
 
+# Establish database connection
+ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || 'postgres://localhost/commitphotos')
+
 use Rack::Session::Cookie, expire_after: 31556926,
                            key: 'commitphotos',
                            secret: ENV['SESSION_SECRET']
