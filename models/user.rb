@@ -17,4 +17,8 @@ class User < ActiveRecord::Base
     self.name.split(' ')[0] || self.username
   end
 
+  def profile_photo
+    hash = Digest::MD5.hexdigest(self.email).to_s
+    "http://gravatar.com/avatar/#{hash}"
+  end
 end

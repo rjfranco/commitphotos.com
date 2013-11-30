@@ -13,5 +13,6 @@ gem 'sinatra-flash'
 gem 'unicorn'
 
 group :development do
+  gem 'shotgun'
   gem 'foreman'
 end

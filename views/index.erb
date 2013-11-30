@@ -1,3 +1,10 @@
 <% @photos.each do |photo| %>
-  <img style="width:800px;height:450px;" src="<%= photo.url %>">
+  <div class="commit-box">
+    <span class="username">@<%= photo.user.username %></span>
+    <img class="profile" src="<%= photo.user.profile_photo %>">
+    <img class="commit" src="<%= photo.url %>">
+    <% if photo.message %>
+      <span class="message">"<%= photo.message %>"</span>
+    <% end %>
+  </div>
 <% end %>

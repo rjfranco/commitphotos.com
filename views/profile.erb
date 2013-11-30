@@ -1,4 +1,5 @@
 <h2><%= @user.name || @user.username %></h2>
+<img src="<%= @user.profile_photo %>">
 <h4><a href="https://github.com/<%= @user.username %>">View on Github</a></h4>
 
 <% if @user.photos.nil? %>
