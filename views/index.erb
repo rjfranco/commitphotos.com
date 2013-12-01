@@ -1,10 +1,11 @@
 <% @photos.each do |photo| %>
   <div class="commit-box">
-    <span class="username">@<%= photo.user.username %></span>
-    <img class="profile" src="<%= photo.user.profile_photo %>">
+    <a href="http://github.com/<%= photo.user.username %>" target="_blank">
+      <img class="profile" src="<%= photo.user.profile_photo %>">
+      <span class="username">@<%= photo.user.username %></span>
+    </a>
     <img class="commit" src="<%= photo.url %>">
-    <% if photo.message %>
-      <span class="message">"<%= photo.message %>"</span>
-    <% end %>
+    <span class="date">DATE</span>
+    <span class="message"><%= photo.message %></span>
   </div>
 <% end %>
