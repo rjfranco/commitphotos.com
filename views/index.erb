@@ -1,9 +1,6 @@
 <% @photos.each do |photo| %>
   <div class="commit-box">
-    <a href="http://github.com/<%= photo.user.username %>" target="_blank">
-      <img class="profile" src="<%= photo.user.profile_photo %>">
-      <span class="username">@<%= photo.user.username %></span>
-    </a>
+    <span class="username"><%= photo.user_name %></span>
     <img class="commit" src="<%= photo.url %>">
     <span class="date">DATE</span>
     <span class="message"><%= photo.message %></span>
