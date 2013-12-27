@@ -2,7 +2,7 @@
   <div class="commit-box">
     <span class="username"><%= photo.user_name %></span>
     <img class="commit" src="<%= photo.url %>">
-    <span class="date">DATE</span>
+    <span class="date"><%= photo.created_at %></span>
     <span class="message"><%= photo.message %></span>
   </div>
 <% end %>
