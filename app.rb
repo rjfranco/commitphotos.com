@@ -15,7 +15,5 @@ post '/photos/new' do
   photo.url = url
   photo.email = params["email"] if params["email"]
   photo.user_name = params["user_name"] if params["user_name"]
-  photo.save!
-
-  status 201
+  photo.save! ? status(201) : status(500)
 end

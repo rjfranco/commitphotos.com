@@ -1,8 +1,8 @@
 <% @photos.each do |photo| %>
   <div class="commit-box">
-    <span class="username"><%= photo.user_name %></span>
+    <% if photo.user_name %><span class="username"><%= photo.user_name %></span><% end %>
     <img class="commit" src="<%= photo.url %>">
-    <span class="date"><%= photo.created_at %></span>
-    <span class="message"><%= photo.message %></span>
+    <span class="date"><%= photo.created_at.strftime('%B %d, %Y') %></span>
+    <% if photo.message %><span class="message"><%= photo.message %></span><% end %>
   </div>
 <% end %>
