@@ -8,7 +8,12 @@ require 'json'
 require 'securerandom'
 
 # Establish database connection
-ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || 'postgres://localhost/commitphotos')
+if ENV['RACK_ENV'] == 'production'
+  ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || 'postgres://localhost/commitphotos')
+else
+  require 'sqlite3'
+  ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => 'commitphotos.db')
+end
 
 require File.expand_path('../lib/s3', __FILE__)
 

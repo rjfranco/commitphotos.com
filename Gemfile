@@ -10,6 +10,7 @@ gem 'sinatra'
 gem 'sinatra-activerecord'
 gem 'sinatra-flash'
 gem 'unicorn'
+gem 'sqlite3'
 
 group :development do
   gem 'shotgun'
