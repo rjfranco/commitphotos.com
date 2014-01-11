@@ -1,0 +1,11 @@
+body {
+  background: black;
+  margin: 0;
+  overflow: hidden;
+}
+
+img {
+  width: 25%;
+  float: left;
+  min-width: 400px;
+}

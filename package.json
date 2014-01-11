@@ -1,0 +1,25 @@
+{
+  "name": "commitphotos.com",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Aley-Gariety/commitphotos.com.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aley-Gariety/commitphotos.com/issues"
+  },
+  "homepage": "https://github.com/Aley-Gariety/commitphotos.com",
+  "dependencies": {
+    "express": "~3.4.7",
+    "knox": "~0.8.8",
+    "engine.io": "~0.8.0",
+    "hbs": "~2.4.0"
+  }
+}

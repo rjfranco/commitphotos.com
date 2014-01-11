@@ -1,0 +1,21 @@
+<!doctype html>
+
+<head>
+  <title>{{title}}</title>
+
+  <link rel='stylesheet' href='/index.css'>
+
+  <script src="/ender.min.js" type="text/javascript"></script>
+  <script src="/engine.io.js" type="text/javascript"></script>
+  <script src="/index.js" type="text/javascript"></script>
+</head>
+
+<body>
+  <main>
+    {{#each commits}}
+    <img src="{{url}}" />
+    {{/each}}
+  </main>
+</body>
+
+</html>
