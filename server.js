@@ -12,7 +12,7 @@ var server = express()
   , client = knox.createClient({
                key: config.key
              , secret: config.secret
-             , bucket: 'commit-photos-dev'
+             , bucket: config.bucket
              })
 
 sock.on('connection', function (socket) {
@@ -34,7 +34,7 @@ function Commit(object) {
 // Load commits
 client.list({}, function (err, data) {
   data.Contents.forEach(function (commit) {
-    var commit = new Commit({ url: 'http://s3.amazonaws.com/commit-photos-dev/' + commit.Key })
+    var commit = new Commit({ url: 'http://s3.amazonaws.com/' + config.bucket + '/' + commit.Key })
     commits.push(commit)
   })
 })
