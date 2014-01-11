@@ -1,10 +1,9 @@
 source 'https://rubygems.org'
+ruby '2.1.0'
 
 gem 'activerecord'
 gem 'aws-s3'
 gem 'dotenv'
-gem 'omniauth'
-gem 'omniauth-github', :git => 'git://github.com/intridea/omniauth-github.git'
 gem 'pg'
 gem 'rake'
 gem 'sinatra'
