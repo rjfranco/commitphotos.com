@@ -1,56 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <title>Commit Photos</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/stylesheets/bootstrap.css" rel="stylesheet">
-    <link href="/stylesheets/style.css" rel="stylesheet">
+    <link href="/stylesheets/index.css" rel="stylesheet">
+    <script src="/ender.min.js" type="text/javascript"></script>
+    <script src="/index.js" type="text/javascript"></script>
   </head>
   <body>
-    <a href="https://github.com/Aley-Gariety/commitphotos"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+    <a href="https://github.com/you"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
     <div class="container">
-      <% if flash[:errors] %>
-        <div id="errors">
-          <%= 'ERRORS: ' + flash[:errors] %>
-        </div>
-      <% elsif flash[:message] %>
-        <div id="message">
-          <%= flash[:message] %>
-        </div>
-      <% end %>
-      <div id="wrap">
-        <br>
-        <nav class="navbar navbar-default" role="navigation">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Commit Photos</a>
-          </div>
-
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="https://github.com/Aley-Gariety/commitphotos">Setup</a></li>
-            </ul>
-          </div><!-- /.navbar-collapse -->
-        </nav>
-
       <div class="container">
         <%= yield %>
       </div>
-
-      <hr>
       <footer>
-        <div class="container">
-          <p class="text-muted credit">CommitPhotos.com from <a href="https://github.com/ColbyAley">@ColbyAley</a> and <a href="https://github.com/JacksonGariety">@JacksonGariety.</a></p>
-        </div>
       </footer>
     
     </div>
-    <script src="https://code.jquery.com/jquery.js"></script>
-    <script src="/javascripts/bootstrap.js"></script>
   </body>
 </html>
