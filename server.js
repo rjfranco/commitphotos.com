@@ -1,8 +1,11 @@
 var express = require('express')
   , hbs = require('hbs')
   , knox = require('knox')
-  , config = require('./config.json')
   , engine = require('engine.io')
+
+
+var dotenv = require('dotenv');
+dotenv.load();
 
 var server = express()
   , sock = engine.listen(8080)
@@ -10,9 +13,9 @@ var server = express()
   , commits = []
   , es = new engine.Server()
   , client = knox.createClient({
-               key: config.key
-             , secret: config.secret
-             , bucket: config.bucket
+               key: process.env.KEY
+             , secret: process.env.SECRET
+             , bucket: process.env.BUCKET
              })
 
 sock.on('connection', function (socket) {
@@ -34,7 +37,7 @@ function Commit(object) {
 // Load commits
 client.list({}, function (err, data) {
   data.Contents.forEach(function (commit) {
-    var commit = new Commit({ url: 'http://s3.amazonaws.com/' + config.bucket + '/' + commit.Key })
+    var commit = new Commit({ url: 'http://s3.amazonaws.com/' + process.env.BUCKET + '/' + commit.Key })
     commits.push(commit)
   })
 })
