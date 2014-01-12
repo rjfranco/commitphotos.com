@@ -16,15 +16,19 @@ var server = express()
   , commits = []
   , es = new engine.Server()
   , sockets = []
-  , client = knox.createClient({
-               key: process.env.KEY
-             , secret: process.env.SECRET
-             , bucket: process.env.BUCKET
-             })
+  , media = knox.createClient({
+      key: process.env.KEY
+    , secret: process.env.SECRET
+    , bucket: process.env.MEDIABUCKET
+  })
+  , json = knox.createClient({
+      key: process.env.KEY
+    , secret: process.env.SECRET
+    , bucket: process.env.JSONBUCKET
+  })
 
 // Add client sockets to the pool
 io.on('connection', function (socket) {
-  console.log('foo')
   sockets.push(socket)
 })
 
@@ -49,13 +53,15 @@ function Commit(object) {
 }
 
 // Load commits
-client.list({}, function (err, data) {
-  data.Contents = data.Contents.reverse().slice(0, 1)
+json.list({}, function (err, data) {
+  data.Contents = data.Contents.reverse().slice(0, 9)
   data.Contents.forEach(function (commit) {
-    if (path.extname(commit.Key) === '.jpg' || path.extname(commit.Key) === '.gif') {
-      var commit = new Commit({ url: 'http://s3.amazonaws.com/' + process.env.BUCKET + '/' + commit.Key })
-      commits.push(commit)
-    }
+    json.get(commit.Key).on('response', function (res) {
+      res.on('data', function (chunk) {
+        var data = JSON.parse(chunk.toString())
+        commits.push(new Commit(data))
+      })
+    }).end()
   })
 })
 
@@ -78,13 +84,13 @@ server.post('/', function (req, res) {
       })
 
   if (path.extname(req.files.photo.path) === '.mov') {
-    commit.url = 'http://s3.amazonaws.com/commit-photos-dev/' + now + '.gif'
+    commit.url = 'http://s3.amazonaws.com/commit-photos-media/' + now + '.gif'
     exec('ffmpeg -i ' + req.files.photo.path + ' -vf scale=400:-1,format=rgb8,format=rgb24 -t 10 -r 7 uploads/' + now + '.gif', function (err, stdout, stderr) {
       if (err) throw err
       put('./uploads/' + now + '.gif', 'gif')
     })
   } else {
-    commit.url = 'http://s3.amazonaws.com/commit-photos-dev/' + now + '.jpg'
+    commit.url = 'http://s3.amazonaws.com/commit-photos-media/' + now + '.jpg'
     put(req.files.photo.path, 'jpg')
   }
 
@@ -93,7 +99,7 @@ server.post('/', function (req, res) {
     // PUT the commit
     string = JSON.stringify(commit)
 
-    client.put('/' + commit.id + '.json', {
+    json.put('/' + commit.id + '.json', {
       'Content-Length': string.length
     , 'Content-Type': 'application/json'
     , 'x-amz-acl': 'public-read'
@@ -102,7 +108,7 @@ server.post('/', function (req, res) {
     // PUT the photo
     photo = fs.readFileSync(path)
 
-    var putImage = client.put('/' + commit.id + '.' + ext, {
+    var putImage = media.put('/' + commit.id + '.' + ext, {
       'Content-Type': 'image/jpeg'
     , 'Content-Length': photo.length
     , 'x-amz-acl': 'public-read'
@@ -113,7 +119,8 @@ server.post('/', function (req, res) {
                          socket.send(string)
                        })
 
-                       commits.push(commit)
+                       commits.unshift(commit)
+                       commits = commits.splice(0, 9)
 
                        res.end('success!')
                      }
