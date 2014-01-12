@@ -4,6 +4,8 @@ var express = require('express')
   , engine = require('engine.io')
   , dotenv = require('dotenv')
   , fs = require('fs')
+  , path = require('path')
+  , exec = require('child_process').exec
 
 // Laod config
 dotenv.load();
@@ -22,12 +24,13 @@ var server = express()
 
 // Add client sockets to the pool
 io.on('connection', function (socket) {
+  console.log('foo')
   sockets.push(socket)
 })
 
 // Remove client sockets from the pool
 io.on('close', function (socket) {
-  sockets.slice(sockets.indexOf(socket), 1)
+  sockets.slice(sockets.indexOf(socket), 12)
 })
 
 server.use(express.bodyParser({ uploadDir :'./uploads' }))
@@ -47,9 +50,12 @@ function Commit(object) {
 
 // Load commits
 client.list({}, function (err, data) {
+  data.Contents = data.Contents.reverse().slice(0, 1)
   data.Contents.forEach(function (commit) {
-    var commit = new Commit({ url: 'http://s3.amazonaws.com/' + process.env.BUCKET + '/' + commit.Key })
-    commits.push(commit)
+    if (path.extname(commit.Key) === '.jpg' || path.extname(commit.Key) === '.gif') {
+      var commit = new Commit({ url: 'http://s3.amazonaws.com/' + process.env.BUCKET + '/' + commit.Key })
+      commits.push(commit)
+    }
   })
 })
 
@@ -58,6 +64,9 @@ server.get('/', function (req, res){
 })
 
 server.post('/photos/new', function (req, res) {
+  res.writeHead(200)
+  res.end('success')
+
   var put
     , string
     , photo
@@ -66,37 +75,52 @@ server.post('/photos/new', function (req, res) {
         id: now
       , message: req.body.message
       , name: req.body.name
-      , url: 'http://s3.amazonaws.com/commit-photos-dev/' + now + '.jpg'
       })
 
-  // PUT the commit
-  string = JSON.stringify(commit)
-  client.put('/' + commit.id + '.json', {
-    'Content-Length': string.length
-  , 'Content-Type': 'application/json'
-  , 'x-amz-acl': 'public-read'
-  }).end(string)
+  if (path.extname(req.files.photo.path) === '.mov') {
+    commit.url = 'http://s3.amazonaws.com/commit-photos-dev/' + now + '.gif'
+    exec('ffmpeg -i ' + req.files.photo.path + ' -vf scale=400:-1,format=rgb8,format=rgb24 -t 10 -r 7 uploads/' + now + '.gif', function (err, stdout, stderr) {
+      if (err) throw err
+      put('./uploads/' + now + '.gif', 'gif')
+    })
+  } else {
+    commit.url = 'http://s3.amazonaws.com/commit-photos-dev/' + now + '.jpg'
+    put(req.files.photo.path, 'jpg')
+  }
 
-  // PUT the photo
-  photo = fs.readFileSync(req.files.photo.path)
-  var putImage = client.put('/' + commit.id + '.jpg', {
-    'Content-Type': 'image/jpeg'
-  , 'Content-Length': photo.length
-  , 'x-amz-acl': 'public-read'
-  }).on('response', function (req) {
-                   if (req.statusCode == 200) {
-                     sockets.forEach(function (socket) {
-                       socket.send(string)
-                     })
+  function put(path, ext) {
 
-                     commits.push(commit)
+    // PUT the commit
+    string = JSON.stringify(commit)
 
-                     res.end('success!')
-                   }
-                 })
+    client.put('/' + commit.id + '.json', {
+      'Content-Length': string.length
+    , 'Content-Type': 'application/json'
+    , 'x-amz-acl': 'public-read'
+    }).end(string)
 
-  putImage.end(photo)
+    // PUT the photo
+    photo = fs.readFileSync(path)
 
+    var putImage = client.put('/' + commit.id + '.' + ext, {
+      'Content-Type': 'image/jpeg'
+    , 'Content-Length': photo.length
+    , 'x-amz-acl': 'public-read'
+    }).on('response', function (req) {
+                     if (req.statusCode == 200) {
+
+                       sockets.forEach(function (socket) {
+                         socket.send(string)
+                       })
+
+                       commits.push(commit)
+
+                       res.end('success!')
+                     }
+                   })
+
+    putImage.end(photo)
+  }
 })
 
 port = process.env.PORT || 1337
