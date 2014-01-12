@@ -1,8 +1,6 @@
 .env
 .DS_Store
 *.db
-<<<<<<< HEAD
-=======
 config.json
 .#*
->>>>>>> Finalized websockets, probably with some bugs.
+uploads/*
