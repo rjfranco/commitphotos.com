@@ -63,7 +63,7 @@ server.get('/', function (req, res){
   res.render('index', { commits: commits } );
 })
 
-server.post('/photos/new', function (req, res) {
+server.post('/', function (req, res) {
   res.writeHead(200)
   res.end('success')
 
