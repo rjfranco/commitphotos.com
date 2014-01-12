@@ -1,4 +1,4 @@
-var socket = eio(':8080');
+var socket = eio(':1337');
 
 socket.addEventListener('message', function (message) {
   console.log(message)

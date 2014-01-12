@@ -3,15 +3,22 @@ var express = require('express')
   , knox = require('knox')
   , engine = require('engine.io')
   , dotenv = require('dotenv')
+  , http = require('http')
   , fs = require('fs')
   , path = require('path')
   , exec = require('child_process').exec
 
 // Laod config
-dotenv.load();
+dotenv.load()
 
 var server = express()
-  , io = engine.listen(8080)
+  , instance = http.createServer(server)
+
+port = process.env.PORT || 1337
+instance.listen(port)
+console.log("Listening on port " + port + ".")
+
+var io = engine.attach(instance)
   , port = 0
   , commits = []
   , es = new engine.Server()
@@ -129,7 +136,3 @@ server.post('/', function (req, res) {
     putImage.end(photo)
   }
 })
-
-port = process.env.PORT || 1337
-server.listen(port)
-console.log("Listening on port " + port + ".")
