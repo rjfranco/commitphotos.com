@@ -41,7 +41,7 @@ io.on('connection', function (socket) {
 
 // Remove client sockets from the pool
 io.on('close', function (socket) {
-  sockets.slice(sockets.indexOf(socket), 12)
+  sockets.slice(sockets.indexOf(socket), 25)
 })
 
 server.use(express.bodyParser({ uploadDir :'./uploads' }))
@@ -61,7 +61,7 @@ function Commit(object) {
 
 // Load commits
 json.list({}, function (err, data) {
-  data.Contents = data.Contents.reverse().slice(0, 9)
+  data.Contents = data.Contents.reverse().slice(0, 25)
   data.Contents.forEach(function (commit) {
     json.get(commit.Key).on('response', function (res) {
       res.on('data', function (chunk) {
@@ -127,7 +127,7 @@ server.post('/', function (req, res) {
                        })
 
                        commits.unshift(commit)
-                       commits = commits.splice(0, 9)
+                       commits = commits.splice(0, 25)
 
                        res.end('success!')
                      }
